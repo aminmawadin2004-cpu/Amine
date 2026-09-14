@@ -23,6 +23,10 @@ jobs:
         flutter-version: '3.19.0'
         channel: 'stable'
 
+    - name: Create Flutter Android Project Structure
+      run: |
+        flutter create . --org com.autodiag.pro --project-name autodg --platforms android
+
     - name: Install dependencies
       run: flutter pub get
 
