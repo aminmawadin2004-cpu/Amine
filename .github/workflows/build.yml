@@ -29,11 +29,27 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
-      - name: Install dependencies
-        run: flutter pub get
+      - name: Backup lib and pubspec
+        run: |
+          mkdir -p /tmp/backup
+          cp -r lib /tmp/backup/lib
+          cp pubspec.yaml /tmp/backup/pubspec.yaml
+
+      - name: Create Flutter Android project structure
+        run: |
+          flutter create . --platforms=android --org com.autodiagpro.app --project-name autodiag_pro_ai
+
+      - name: Restore lib and pubspec
+        run: |
+          rm -rf lib
+          cp -r /tmp/backup/lib lib
+          cp /tmp/backup/pubspec.yaml pubspec.yaml
 
       - name: Accept Android licenses
         run: yes | flutter doctor --android-licenses || true
+
+      - name: Install dependencies
+        run: flutter pub get
 
       - name: Build APK (release)
         run: flutter build apk --release --verbose
