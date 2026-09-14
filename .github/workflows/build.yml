@@ -20,16 +20,15 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.19.0'
+        flutter-version: '3.19.6'
         channel: 'stable'
 
     - name: Create Flutter Android Project Structure
       run: |
         flutter create . --org com.autodiag.pro --project-name autodg --platforms android
 
-    - name: Install Android SDK Build-Tools & Accept Licenses
+    - name: Accept Android Licenses
       run: |
-        yes | sdkmanager "build-tools;30.0.3" "platforms;android-33"
         yes | flutter doctor --android-licenses
 
     - name: Install dependencies
