@@ -27,6 +27,9 @@ jobs:
       run: |
         flutter create . --org com.autodiag.pro --project-name autodg --platforms android
 
+    - name: Accept Android Licenses
+      run: yes | flutter doctor --android-licenses
+
     - name: Install dependencies
       run: flutter pub get
 
