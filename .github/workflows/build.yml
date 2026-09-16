@@ -46,6 +46,25 @@ jobs:
           cp /tmp/backup/pubspec.yaml pubspec.yaml
           rm -f pubspec.lock
 
+      - name: Upgrade Kotlin and Gradle versions
+        run: |
+          # Bump Kotlin version to 1.9.24 to match the stdlib pulled in by dependencies
+          if [ -f android/settings.gradle ]; then
+            sed -i 's/org.jetbrains.kotlin.android" version "[0-9.]*"/org.jetbrains.kotlin.android" version "1.9.24"/' android/settings.gradle
+            sed -i 's/com.android.application" version "[0-9.]*"/com.android.application" version "8.1.0"/' android/settings.gradle
+          fi
+          if [ -f android/build.gradle ]; then
+            sed -i 's/ext.kotlin_version = .[0-9.]*./ext.kotlin_version = "1.9.24"/' android/build.gradle
+          fi
+          # Bump Gradle wrapper to a version compatible with AGP 8.x
+          if [ -f android/gradle/wrapper/gradle-wrapper.properties ]; then
+            sed -i 's|distributionUrl=.*|distributionUrl=https\\://services.gradle.org/distributions/gradle-8.3-all.zip|' android/gradle/wrapper/gradle-wrapper.properties
+          fi
+          echo "----- settings.gradle -----"
+          cat android/settings.gradle || true
+          echo "----- gradle-wrapper.properties -----"
+          cat android/gradle/wrapper/gradle-wrapper.properties || true
+
       - name: Accept Android licenses
         run: yes | flutter doctor --android-licenses || true
 
